@@ -1,6 +1,3 @@
-data "aws_caller_identity" "default" {}
-data "aws_region" "default" {}
-
 variable "chamber_user_enabled" {
   default     = "true"
   description = "Set to false to prevent the module from creating chamber user"
