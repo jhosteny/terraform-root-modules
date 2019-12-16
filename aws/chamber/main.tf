@@ -29,3 +29,7 @@ provider "aws" {
     role_arn = "${var.aws_assume_role_arn}"
   }
 }
+
+data "aws_caller_identity" "default" {}
+data "aws_region" "default" {}
+
