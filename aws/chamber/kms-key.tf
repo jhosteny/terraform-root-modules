@@ -25,3 +25,11 @@ output "chamber_kms_key_alias_name" {
   value       = "${module.chamber_kms_key.alias_name}"
   description = "KMS key alias name"
 }
+
+resource "aws_ssm_parameter" "chamber_kms_key_arn" {
+  name        = "${format("/chamber/%s", "chamber_kms_key_arn")}"
+  value       = "${module.chamber_kms_key.key_arn}"
+  description = "Chamber KMS Key ARN"
+  type        = "String"
+  overwrite   = "true"
+}
