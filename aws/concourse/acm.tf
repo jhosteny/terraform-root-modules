@@ -28,7 +28,7 @@ variable "tsa_domain_name" {
 }
 
 locals {
-  domain_name = var.domain_name != "" ? var.domain_name : "${var.name}.${var.dns_parent_zone_name}"
+  domain_name     = var.domain_name != "" ? var.domain_name : "${var.name}.${var.dns_parent_zone_name}"
   tsa_domain_name = var.tsa_domain_name != "" ? var.tsa_domain_name : "${var.name}-tsa.${var.dns_parent_zone_name}"
 
   subject_alternative_names = distinct(

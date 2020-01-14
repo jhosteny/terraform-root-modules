@@ -43,27 +43,27 @@ resource "aws_security_group_rule" "ssh" {
 }
 
 resource "aws_security_group_rule" "postgres" {
-  type                      = "egress"
-  security_group_id         = aws_security_group.default.id
-  from_port                 = 5432
-  to_port                   = 5432
-  protocol                  = "tcp"
-  source_security_group_id  = var.rds_security_group_id
+  type                     = "egress"
+  security_group_id        = aws_security_group.default.id
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = var.rds_security_group_id
 }
 
 resource "aws_security_group_rule" "http_in" {
-  type                      = "ingress"
-  security_group_id         = aws_security_group.default.id
-  from_port                 = 80
-  to_port                   = 80
-  protocol                  = "tcp"
-  source_security_group_id  = module.alb.security_group_id
+  type                     = "ingress"
+  security_group_id        = aws_security_group.default.id
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  source_security_group_id = module.alb.security_group_id
 }
 
 # See https://docs.aws.amazon.com/elasticloadbalancing/latest/network/target-group-register-targets.html#target-security-groups
 data "aws_network_interfaces" "alb" {
   filter {
-    name = "description"
+    name   = "description"
     values = ["ELB net/${module.nlb.nlb_name}/*"]
   }
 }
@@ -74,14 +74,14 @@ data "aws_network_interface" "alb" {
 }
 
 resource "aws_security_group_rule" "tsa_http_health_check_in" {
-  count                     = length(data.aws_network_interface.alb.*.id)
-  type                      = "ingress"
-  security_group_id         = aws_security_group.default.id
-  from_port                 = 80
-  to_port                   = 80
-  protocol                  = "tcp"
-  cidr_blocks               = ["${data.aws_network_interface.alb.*.private_ip[count.index]}/32"]
-  description               = "Ingress health check from NLB"
+  count             = length(data.aws_network_interface.alb.*.id)
+  type              = "ingress"
+  security_group_id = aws_security_group.default.id
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  cidr_blocks       = ["${data.aws_network_interface.alb.*.private_ip[count.index]}/32"]
+  description       = "Ingress health check from NLB"
 }
 
 /*
@@ -100,13 +100,13 @@ resource "aws_security_group_rule" "tsa_http_health_check_in" {
 */
 
 resource "aws_security_group_rule" "tsa_ssh_in" {
-  type                      = "ingress"
-  security_group_id         = aws_security_group.default.id
-  from_port                 = 2222
-  to_port                   = 2222
-  protocol                  = "tcp"
-  cidr_blocks               = ["0.0.0.0/0"]
-  description               = "Ingress from NLB"
+  type              = "ingress"
+  security_group_id = aws_security_group.default.id
+  from_port         = 2222
+  to_port           = 2222
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  description       = "Ingress from NLB"
 }
 
 # It would probably be preferable to pass the security group
@@ -120,10 +120,10 @@ resource "aws_security_group_rule" "tsa_ssh_in" {
 # for different DBs do not get access to other DBs (among other
 # reasons).
 resource "aws_security_group_rule" "rds" {
-  type                      = "ingress"
-  security_group_id         = var.rds_security_group_id
-  from_port                 = var.rds_port
-  to_port                   = var.rds_port
-  protocol                  = "tcp"
-  source_security_group_id  = aws_security_group.default.id
+  type                     = "ingress"
+  security_group_id        = var.rds_security_group_id
+  from_port                = var.rds_port
+  to_port                  = var.rds_port
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.default.id
 }

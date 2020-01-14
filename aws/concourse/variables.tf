@@ -81,20 +81,18 @@ variable "rds_db_name" {
 
 
 variable "rds_engine_version" {
-  description = "Postgres engine version used in the Concourse database server. Only needed if `auto_create_db` is set to `true`"
+  description = "Postgres engine version used in the Concourse database server"
   default     = null
   type        = string
 }
 
 variable "rds_admin_username" {
-  description = "Admin user of the Postgres database server. Only needed if `auto_create_db` is set to `true`"
-  default     = ""
+  description = "Admin user of the Postgres database server"
   type        = string
 }
 
 variable "rds_admin_password" {
-  description = "Admin password of the Postgres database server. Only needed if `auto_create_db` is set to `true`"
-  default     = ""
+  description = "Admin password of the Postgres database server"
   type        = string
 }
 
@@ -114,17 +112,6 @@ variable "concourse_db_username" {
   description = "Database user to logon to postgresql"
   default     = "concourse"
   type        = string
-}
-
-variable "concourse_db_password" {
-  description = "Password to logon to postgresql"
-  type        = string
-}
-
-variable "auto_create_db" {
-  description = "If set to `true`, the Concourse web container will attempt to create the postgres database if it's not already created"
-  default     = true
-  type        = bool
 }
 
 variable "concourse_db_name" {
