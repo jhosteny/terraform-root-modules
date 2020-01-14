@@ -60,6 +60,17 @@ resource "aws_security_group_rule" "http_in" {
   source_security_group_id = module.alb.security_group_id
 }
 
+/* TODO: using this causes the following error:
+Error: Invalid count argument
+
+  on .module/sg.tf line 72, in data "aws_network_interface" "alb":
+  72:   count = length(data.aws_network_interfaces.alb.ids)
+
+The "count" value depends on resource attributes that cannot be determined
+until apply, so Terraform cannot predict how many instances will be created.
+To work around this, use the -target argument to first apply only the
+resources that the count depends on.
+
 # See https://docs.aws.amazon.com/elasticloadbalancing/latest/network/target-group-register-targets.html#target-security-groups
 data "aws_network_interfaces" "alb" {
   filter {
@@ -83,8 +94,8 @@ resource "aws_security_group_rule" "tsa_http_health_check_in" {
   cidr_blocks       = ["${data.aws_network_interface.alb.*.private_ip[count.index]}/32"]
   description       = "Ingress health check from NLB"
 }
+*/
 
-/*
 data "aws_vpc" "default" {
   id = var.vpc_id
 }
@@ -97,7 +108,7 @@ resource "aws_security_group_rule" "tsa_http_health_check_in" {
   protocol                  = "tcp"
   cidr_blocks               = [data.aws_vpc.default.cidr_block]
 }
-*/
+
 
 resource "aws_security_group_rule" "tsa_ssh_in" {
   type              = "ingress"

@@ -98,8 +98,12 @@ module "alb" {
   alb_access_logs_s3_bucket_force_destroy = true
 }
 
+data "aws_route53_zone" "default" {
+  name = var.dns_zone_name
+}
+
 resource "aws_route53_record" "alb" {
-  zone_id = module.dns.zone_id
+  zone_id = data.aws_route53_zone.default.zone_id
   name    = local.domain_name
   type    = "CNAME"
   ttl     = 300
@@ -131,7 +135,7 @@ module "nlb" {
 }
 
 resource "aws_route53_record" "nlb" {
-  zone_id = module.dns.zone_id
+  zone_id = data.aws_route53_zone.default.zone_id
   name    = local.tsa_domain_name
   type    = "CNAME"
   ttl     = 300
@@ -259,9 +263,9 @@ module "download_keys_container_definition" {
 }
 
 resource "random_password" "concourse_db_password" {
-  length           = 16
-  special          = true
-  override_special = "/@\" "
+  length  = 24
+  number  = true
+  special = false
 }
 
 module "create_db_container_definition" {
