@@ -340,9 +340,7 @@ resource "aws_sns_topic" "sns_topic" {
 }
 
 module "web" {
-  #source      = "git::https://github.com/cloudposse/terraform-aws-ecs-web-app.git?ref=tags/0.24.0"
-  #source      = "/home/jhosteny/src/github/jhosteny/terraform-aws-ecs-web-app"
-  source     = "git::https://github.com/jhosteny/terraform-aws-ecs-web-app.git?ref=feat/add-init-containers"
+  source     = "git::https://github.com/cloudposse/terraform-aws-ecs-web-app.git?ref=tags/0.26.0"
   name       = var.name
   namespace  = var.namespace
   stage      = var.stage
